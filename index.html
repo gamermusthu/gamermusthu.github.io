@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingcobra | Ultimate eFootball Pro Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #0a1128;
+            --secondary: #034078;
+            --accent: #ff2e63;
+            --light: #f8f9fa;
+            --gold: #ffd700;
+            --green: #00ff8c;
+            --field-green: #2d5a27;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 17, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+
+        /* Page Container */
+        .page-container {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        /* Home Page Styles */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 46, 99, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--accent);
+            color: var(--light);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid var(--accent);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: transparent;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 46, 99, 0.3);
+        }
+
+        .player-card {
+            position: absolute;
+            right: 10%;
+            bottom: 10%;
+            width: 300px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transform: perspective(1000px) rotateY(15deg);
+            transition: transform 0.5s;
+        }
+
+        .player-card:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .player-img {
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('musthu.jpeg') center/cover;
+        }
+
+        .player-stats {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .player-stats h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 2rem;
+            background: var(--secondary);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--accent);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .stat-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card p {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* Page Titles */
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-top: 2rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: var(--accent);
+        }
+
+        .page-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 2rem;
+        }
+
+        /* My Squad Page Styles */
+        .team-overview {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+        }
+
+        .team-info {
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        .team-rating {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .team-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Formation Section */
+        .formation-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .formation-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+        }
+
+        .football-field {
+            background: var(--field-green);
+            border-radius: 15px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .field-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+
+        .center-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .formation-row {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .player-position {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .player-position:hover {
+            transform: scale(1.1);
+        }
+
+        .player-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--accent);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .player-circle.goalkeeper {
+            background: #8B4513;
+        }
+
+        .player-circle.defender {
+            background: #034078;
+        }
+
+        .player-circle.midfielder {
+            background: #2a9d8f;
+        }
+
+        .player-circle.attacker {
+            background: #e63946;
+        }
+
+        .player-number {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .player-name {
+            margin-top: 5px;
+            font-size: 0.8rem;
+            text-align: center;
+            max-width: 80px;
+        }
+
+        /* Squad Roster */
+        .squad-roster {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .roster-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+        }
+
+        .position-group {
+            margin-bottom: 2rem;
+        }
+
+        .position-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .player-card-roster {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s, background 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .player-card-roster:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .player-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name-roster {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .player-position-roster {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+        }
+
+        .player-rating {
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* Team Stats */
+        .team-stats-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .stats-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+        }
+
+        .stats-grid-squad {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Achievements Page Styles */
+        .stats-overview {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            min-width: 200px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+
+        /* Major Trophies */
+        .major-trophies {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .trophies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .trophy-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trophy-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .trophy-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+            position: relative;
+            z-index: 2;
+        }
+
+        .trophy-name {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+            position: relative;
+            z-index: 2;
+        }
+
+        .trophy-details {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 2;
+        }
+
+        .trophy-year {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            position: relative;
+            z-index: 2;
+        }
+
+        .trophy-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0) 70%);
+            transform: rotate(30deg);
+            z-index: 1;
+        }
+
+        /* Awards & Recognitions */
+        .awards-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .awards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .award-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .award-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .award-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .award-info {
+            flex: 1;
+        }
+
+        .award-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .award-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Milestones */
+        .milestones-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: var(--accent);
+            transform: translateX(-50%);
+        }
+
+        .milestone {
+            padding: 1.5rem;
+            position: relative;
+            width: 50%;
+            margin-bottom: 3rem;
+        }
+
+        .milestone:nth-child(odd) {
+            left: 0;
+        }
+
+        .milestone:nth-child(even) {
+            left: 50%;
+        }
+
+        .milestone-content {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .milestone-content:hover {
+            transform: scale(1.05);
+        }
+
+        .milestone-year {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .milestone-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .milestone-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .milestone::after {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: 3px solid var(--primary);
+        }
+
+        .milestone:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .milestone:nth-child(even)::after {
+            left: -10px;
+        }
+
+        /* Records */
+        .records-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .records-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .record-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .record-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .record-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .record-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+
+        .record-label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Highlights Page Styles */
+        .highlights-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: var(--secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1556056504-5c7696c4c28d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80') center/cover;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .play-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .video-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .video-stats {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+        }
+
+        /* Contact Page Styles */
+        .contact-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+
+        .contact-details {
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-icon {
+            font-size: 1.2rem;
+            color: var(--accent);
+            width: 30px;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .form-textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            background: #050a1a;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+        }
+
+        .glowing {
+            animation: glow 2s infinite;
+        }
+
+        /* Page Transitions */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .player-card {
+                position: relative;
+                right: auto;
+                bottom: auto;
+                margin: 2rem auto;
+                transform: none;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .team-overview {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .formation-row {
+                gap: 1rem;
+            }
+            
+            .player-circle {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .player-name {
+                font-size: 0.7rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .milestone {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .milestone:nth-child(even) {
+                left: 0;
+            }
+            
+            .milestone::after {
+                left: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo" data-page="home">
+            <i class="fas fa-futbol"></i>
+            <span>eFOOTBALL</span>PRO
+        </div>
+        <nav>
+            <ul>
+                <li><a class="nav-link active" data-page="home">Home</a></li>
+                <li><a class="nav-link" data-page="highlights">Highlights</a></li>
+                <li><a class="nav-link" data-page="my-squad">My Squad</a></li>
+                <li><a class="nav-link" data-page="achievements">Achievements</a></li>
+                <li><a class="nav-link" data-page="contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>ELITE eFOOTBALL PRO PLAYER</h1>
+                    <p>Ranked in the top 0.1% of players worldwide with over 500 competitive wins and multiple championship titles.</p>
+                    <a class="btn" data-page="my-squad">View Player Stats</a>
+                </div>
+                <div class="player-card floating">
+                    <div class="player-img"></div>
+                    <div class="player-stats">
+                        <h3>Kingcobra Ultimate Pro</h3>
+                        <div class="stats-bar">
+                            <div class="stat">
+                                <span class="stat-label">RATING</span>
+                                <span class="stat-value">94</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">WINS</span>
+                                <span class="stat-value">87%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="stats">
+                <h2 class="section-title">PLAYER STATISTICS</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Tournament Wins</h3>
+                        <p>42</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Player Rating</h3>
+                        <p>9.8/10</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>Matches Played</h3>
+                        <p>1,247</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>Win Rate</h3>
+                        <p>87.3%</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-fire"></i>
+                        <h3>Goals Scored</h3>
+                        <p>3,842</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Clean Sheets</h3>
+                        <p>512</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Highlights Page -->
+        <div id="highlights" class="page">
+            <h1 class="page-title">HIGHLIGHTS</h1>
+            <p class="page-subtitle">Relive the most incredible moments, goals, and matches from my eFootball career.</p>
+            
+            <section class="highlights-section">
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">World eCup Final 2023 - Epic Comeback</h3>
+                            <p class="video-description">Down 3-0 at halftime, an incredible second half performance to win 4-3 in the World eCup Final.</p>
+                            <div class="video-stats">
+                                <span><i class="fas fa-eye"></i> 2.4M views</span>
+                                <span><i class="fas fa-calendar"></i> 3 months ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">Perfect Hat-trick in 12 Minutes</h3>
+                            <p class="video-description">Left foot, right foot, and header - the perfect hat-trick in record time against a top-ranked opponent.</p>
+                            <div class="video-stats">
+                                <span><i class="fas fa-eye"></i> 1.7M views</span>
+                                <span><i class="fas fa-calendar"></i> 5 months ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">90th Minute Winner - Elite Series Semi-Final</h3>
+                            <p class="video-description">Last-minute free kick from 30 yards out to secure a place in the Elite Series Final.</p>
+                            <div class="video-stats">
+                                <span><i class="fas fa-eye"></i> 1.2M views</span>
+                                <span><i class="fas fa-calendar"></i> 8 months ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">Skill Move Compilation - Defenders Destroyed</h3>
+                            <p class="video-description">A collection of the most creative skill moves and dribbles from the past season.</p>
+                            <div class="video-stats">
+                                <span><i class="fas fa-eye"></i> 3.1M views</span>
+                                <span><i class="fas fa-calendar"></i> 1 year ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">Defensive Masterclass - 15 Saves</h3>
+                            <p class="video-description">Incredible goalkeeping performance with 15 crucial saves to secure a clean sheet.</p>
+                            <div class="video-stats">
+                                <span><i class="fas fa-eye"></i> 890K views</span>
+                                <span><i class="fas fa-calendar"></i> 1 year ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">Team Play Excellence - 35 Pass Move</h3>
+                            <p class="video-description">A beautiful team goal featuring 35 consecutive passes before the finish.</p>
+                            <div class="video-stats">
+                                <span><i class="fas fa-eye"></i> 1.5M views</span>
+                                <span><i class="fas fa-calendar"></i> 1 year ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- My Squad Page -->
+        <div id="my-squad" class="page">
+            <h1 class="page-title">MY SQUAD</h1>
+            
+            <!-- Team Overview -->
+            <section class="team-overview">
+                <div class="team-info">
+                    <h2 class="team-name">VENOM FC</h2>
+                    <div class="team-rating">
+                        <span>Overall Rating: </span>
+                        <span class="rating-value">92</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="team-stat">
+                            <div class="stat-value">4-3-3</div>
+                            <div class="stat-label">FORMATION</div>
+                        </div>
+                        <div class="team-stat">
+                            <div class="stat-value">100%</div>
+                            <div class="stat-label">TEAM SPIRIT</div>
+                        </div>
+                        <div class="team-stat">
+                            <div class="stat-value">5★</div>
+                            <div class="stat-label">TEAM STRENGTH</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Formation Section -->
+            <section class="formation-section">
+                <h2 class="formation-title">TEAM FORMATION</h2>
+                <div class="football-field">
+                    <div class="field-lines"></div>
+                    <div class="center-circle"></div>
+                    <div class="center-line"></div>
+                    
+                    <!-- Goalkeeper -->
+                    <div class="formation-row">
+                        <div class="player-position">
+                            <div class="player-circle goalkeeper">
+                                <span class="player-number">1</span>
+                            </div>
+                            <div class="player-name">Neuer</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Defenders -->
+                    <div class="formation-row">
+                        <div class="player-position">
+                            <div class="player-circle defender">
+                                <span class="player-number">2</span>
+                            </div>
+                            <div class="player-name">Alexander-Arnold</div>
+                        </div>
+                        <div class="player-position">
+                            <div class="player-circle defender">
+                                <span class="player-number">4</span>
+                            </div>
+                            <div class="player-name">Van Dijk</div>
+                        </div>
+                        <div class="player-position">
+                            <div class="player-circle defender">
+                                <span class="player-number">5</span>
+                            </div>
+                            <div class="player-name">Ramos</div>
+                        </div>
+                        <div class="player-position">
+                            <div class="player-circle defender">
+                                <span class="player-number">3</span>
+                            </div>
+                            <div class="player-name">Robertson</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Midfielders -->
+                    <div class="formation-row">
+                        <div class="player-position">
+                            <div class="player-circle midfielder">
+                                <span class="player-number">8</span>
+                            </div>
+                            <div class="player-name">Kroos</div>
+                        </div>
+                        <div class="player-position">
+                            <div class="player-circle midfielder">
+                                <span class="player-number">6</span>
+                            </div>
+                            <div class="player-name">Kante</div>
+                        </div>
+                        <div class="player-position">
+                            <div class="player-circle midfielder">
+                                <span class="player-number">10</span>
+                            </div>
+                            <div class="player-name">De Bruyne</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Attackers -->
+                    <div class="formation-row">
+                        <div class="player-position">
+                            <div class="player-circle attacker">
+                                <span class="player-number">11</span>
+                            </div>
+                            <div class="player-name">Salah</div>
+                        </div>
+                        <div class="player-position">
+                            <div class="player-circle attacker">
+                                <span class="player-number">9</span>
+                            </div>
+                            <div class="player-name">Haaland</div>
+                        </div>
+                        <div class="player-position">
+                            <div class="player-circle attacker">
+                                <span class="player-number">7</span>
+                            </div>
+                            <div class="player-name">Neymar</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Squad Roster -->
+            <section class="squad-roster">
+                <h2 class="roster-title">SQUAD ROSTER</h2>
+                
+                <div class="position-group">
+                    <h3 class="position-title">Goalkeepers</h3>
+                    <div class="players-grid">
+                        <div class="player-card-roster">
+                            <div class="player-avatar">1</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Manuel Neuer</div>
+                                <div class="player-position-roster">Goalkeeper</div>
+                                <div class="player-rating">Rating: 92</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">13</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Thibaut Courtois</div>
+                                <div class="player-position-roster">Goalkeeper</div>
+                                <div class="player-rating">Rating: 90</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="position-group">
+                    <h3 class="position-title">Defenders</h3>
+                    <div class="players-grid">
+                        <div class="player-card-roster">
+                            <div class="player-avatar">2</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Trent Alexander-Arnold</div>
+                                <div class="player-position-roster">Right Back</div>
+                                <div class="player-rating">Rating: 88</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">4</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Virgil van Dijk</div>
+                                <div class="player-position-roster">Center Back</div>
+                                <div class="player-rating">Rating: 91</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">5</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Sergio Ramos</div>
+                                <div class="player-position-roster">Center Back</div>
+                                <div class="player-rating">Rating: 89</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">3</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Andrew Robertson</div>
+                                <div class="player-position-roster">Left Back</div>
+                                <div class="player-rating">Rating: 87</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="position-group">
+                    <h3 class="position-title">Midfielders</h3>
+                    <div class="players-grid">
+                        <div class="player-card-roster">
+                            <div class="player-avatar">8</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Toni Kroos</div>
+                                <div class="player-position-roster">Central Midfielder</div>
+                                <div class="player-rating">Rating: 90</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">6</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">N'Golo Kanté</div>
+                                <div class="player-position-roster">Defensive Midfielder</div>
+                                <div class="player-rating">Rating: 89</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">10</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Kevin De Bruyne</div>
+                                <div class="player-position-roster">Attacking Midfielder</div>
+                                <div class="player-rating">Rating: 92</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="position-group">
+                    <h3 class="position-title">Attackers</h3>
+                    <div class="players-grid">
+                        <div class="player-card-roster">
+                            <div class="player-avatar">11</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Mohamed Salah</div>
+                                <div class="player-position-roster">Right Winger</div>
+                                <div class="player-rating">Rating: 91</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">9</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Erling Haaland</div>
+                                <div class="player-position-roster">Striker</div>
+                                <div class="player-rating">Rating: 93</div>
+                            </div>
+                        </div>
+                        <div class="player-card-roster">
+                            <div class="player-avatar">7</div>
+                            <div class="player-info">
+                                <div class="player-name-roster">Neymar Jr.</div>
+                                <div class="player-position-roster">Left Winger</div>
+                                <div class="player-rating">Rating: 92</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Team Stats -->
+            <section class="team-stats-section">
+                <h2 class="stats-title">TEAM STATISTICS</h2>
+                <div class="stats-grid-squad">
+                    <div class="stat-card">
+                        <i class="fas fa-futbol"></i>
+                        <h3>Goals Scored</h3>
+                        <p>247</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Clean Sheets</h3>
+                        <p>58</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Matches Won</h3>
+                        <p>89%</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-passport"></i>
+                        <h3>Possession</h3>
+                        <p>63%</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-crosshairs"></i>
+                        <h3>Shots on Target</h3>
+                        <p>72%</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Pass Accuracy</h3>
+                        <p>88%</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Achievements Page -->
+        <div id="achievements" class="page">
+            <h1 class="page-title">ACHIEVEMENTS</h1>
+            <p class="page-subtitle">A showcase of championships, awards, and records earned through dedication and exceptional skill in competitive eFootball.</p>
+            
+            <!-- Stats Overview -->
+            <section class="stats-overview">
+                <div class="stat-item">
+                    <div class="stat-number">42</div>
+                    <div class="stat-label">Tournaments Won</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Major Titles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">MVP Awards</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">World Records</div>
+                </div>
+            </section>
+            
+            <!-- Major Trophies -->
+            <section class="major-trophies">
+                <h2 class="section-title">MAJOR TROPHIES</h2>
+                <div class="trophies-grid">
+                    <div class="trophy-card glowing">
+                        <div class="trophy-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="trophy-name">World eCup Championship</h3>
+                        <p class="trophy-details">World's premier eFootball tournament featuring top players from 32 countries</p>
+                        <div class="trophy-year">2023</div>
+                    </div>
+                    <div class="trophy-card">
+                        <div class="trophy-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="trophy-name">Global Masters Tournament</h3>
+                        <p class="trophy-details">Invitational tournament for the world's top 16 ranked players</p>
+                        <div class="trophy-year">2022</div>
+                    </div>
+                    <div class="trophy-card">
+                        <div class="trophy-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="trophy-name">Elite Series Championship</h3>
+                        <p class="trophy-details">Season-long competition with 8 international qualifying events</p>
+                        <div class="trophy-year">2022</div>
+                    </div>
+                    <div class="trophy-card">
+                        <div class="trophy-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="trophy-name">Pro League Finals</h3>
+                        <p class="trophy-details">Professional eFootball league featuring weekly matches</p>
+                        <div class="trophy-year">2021</div>
+                    </div>
+                    <div class="trophy-card">
+                        <div class="trophy-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="trophy-name">International Cup</h3>
+                        <p class="trophy-details">Regional championship with players from Europe, Asia & Americas</p>
+                        <div class="trophy-year">2021</div>
+                    </div>
+                    <div class="trophy-card">
+                        <div class="trophy-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="trophy-name">Champions Showdown</h3>
+                        <p class="trophy-details">Exhibition tournament featuring former world champions</p>
+                        <div class="trophy-year">2020</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Awards & Recognitions -->
+            <section class="awards-section">
+                <h2 class="section-title">AWARDS & RECOGNITIONS</h2>
+                <div class="awards-container">
+                    <div class="award-card">
+                        <div class="award-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="award-info">
+                            <h3 class="award-title">eFootball Player of the Year</h3>
+                            <p class="award-description">Awarded by eSports Federation (2023)</p>
+                        </div>
+                    </div>
+                    <div class="award-card">
+                        <div class="award-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="award-info">
+                            <h3 class="award-title">Golden Controller Award</h3>
+                            <p class="award-description">Best Technical Player (2022, 2023)</p>
+                        </div>
+                    </div>
+                    <div class="award-card">
+                        <div class="award-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="award-info">
+                            <h3 class="award-title">All-Star Selection</h3>
+                            <p class="award-description">Fan-voted All-Star Team (2021-2023)</p>
+                        </div>
+                    </div>
+                    <div class="award-card">
+                        <div class="award-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="award-info">
+                            <h3 class="award-title">Rookie of the Year</h3>
+                            <p class="award-description">Best New Player (2020)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Milestones -->
+            <section class="milestones-section">
+                <h2 class="section-title">CAREER MILESTONES</h2>
+                <div class="timeline">
+                    <div class="milestone">
+                        <div class="milestone-content">
+                            <div class="milestone-year">2023</div>
+                            <h3 class="milestone-title">World eCup Champion</h3>
+                            <p class="milestone-description">Became the youngest player to win the World eCup, defeating the defending champion in a thrilling final.</p>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-content">
+                            <div class="milestone-year">2022</div>
+                            <h3 class="milestone-title">Grand Slam Achievement</h3>
+                            <p class="milestone-description">Won all four major tournaments in a single calendar year - a feat never before accomplished.</p>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-content">
+                            <div class="milestone-year">2021</div>
+                            <h3 class="milestone-title">World #1 Ranking</h3>
+                            <p class="milestone-description">Reached the top of the global eFootball rankings for the first time and maintained it for 8 consecutive months.</p>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-content">
+                            <div class="milestone-year">2020</div>
+                            <h3 class="milestone-title">Professional Debut</h3>
+                            <p class="milestone-description">Signed first professional contract and won Rookie of the Year in debut season.</p>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-content">
+                            <div class="milestone-year">2019</div>
+                            <h3 class="milestone-title">First Major Tournament</h3>
+                            <p class="milestone-description">Qualified for first international tournament, reaching semi-finals as an amateur player.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Records -->
+            <section class="records-section">
+                <h2 class="section-title">WORLD RECORDS</h2>
+                <div class="records-grid">
+                    <div class="record-card">
+                        <div class="record-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="record-value">47</div>
+                        <div class="record-label">Consecutive Wins</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <div class="record-value">12-0</div>
+                        <div class="record-label">Largest Final Victory</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="record-value">8.2s</div>
+                        <div class="record-label">Fastest Tournament Goal</div>
+                    </div>
+                    <div class="record-card">
+                        <div class="record-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="record-value">94.7%</div>
+                        <div class="record-label">Highest Pass Accuracy</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <h1 class="page-title">CONTACT</h1>
+            <p class="page-subtitle">Get in touch for collaborations, sponsorship opportunities, or media inquiries.</p>
+            
+            <section class="contact-section">
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <h2 class="contact-title">Contact Information</h2>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-text">
+                                    <h3>Email</h3>
+                                    <p>alex.venom@efootballpro.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="contact-text">
+                                    <h3>Phone</h3>
+                                    <p>+1 (555) 123-4567</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-text">
+                                    <h3>Location</h3>
+                                    <p>Los Angeles, California</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 class="contact-title">Business Inquiries</h2>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <div class="contact-text">
+                                    <h3>Management</h3>
+                                    <p>Michael Rodriguez</p>
+                                    <p>m.rodriguez@prosports.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <div class="contact-text">
+                                    <h3>Sponsorships</h3>
+                                    <p>Sarah Johnson</p>
+                                    <p>s.johnson@brands.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h2 class="contact-title">Send a Message</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label class="form-label" for="name">Your Name</label>
+                                <input class="form-input" type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="email">Your Email</label>
+                                <input class="form-input" type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="subject">Subject</label>
+                                <input class="form-input" type="text" id="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="message">Your Message</label>
+                                <textarea class="form-textarea" id="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-twitch"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        <p class="copyright">© 2023 Alex "Venom" Reyes. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Page Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all navigation links
+            const navLinks = document.querySelectorAll('.nav-link, .logo, .btn[data-page]');
+            
+            // Function to switch pages
+            function switchPage(pageId) {
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show the selected page
+                document.getElementById(pageId).classList.add('active');
+                
+                // Update active navigation link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Set the active link
+                document.querySelector(`.nav-link[data-page="${pageId}"]`).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+            
+            // Add click event listeners to navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId) {
+                        switchPage(pageId);
+                    }
+                });
+            });
+            
+            // Add scroll effect to header
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 50) {
+                    header.style.background = 'rgba(10, 17, 40, 0.95)';
+                    header.style.padding = '0.5rem 2rem';
+                } else {
+                    header.style.background = 'rgba(10, 17, 40, 0.95)';
+                    header.style.padding = '1rem 2rem';
+                }
+            });
+            
+            // Add hover effect to player positions
+            const playerPositions = document.querySelectorAll('.player-position');
+            
+            playerPositions.forEach(position => {
+                position.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '10';
+                });
+                
+                position.addEventListener('mouseleave', function() {
+                    this.style.zIndex = '2';
+                });
+            });
+            
+            // Add animation to elements when they come into view
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Animate various elements
+            const elementsToAnimate = [
+                '.stat-card',
+                '.player-card-roster',
+                '.stat-item',
+                '.trophy-card',
+                '.award-card',
+                '.milestone-content',
+                '.record-card',
+                '.video-card'
+            ];
+
+            elementsToAnimate.forEach(selector => {
+                document.querySelectorAll(selector).forEach(el => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(20px)';
+                    el.style.transition = 'opacity 0.5s, transform 0.5s';
+                    observer.observe(el);
+                });
+            });
+
+            // Add glowing effect to the latest trophy
+            const latestTrophy = document.querySelector('.trophy-card:first-child');
+            if (latestTrophy) {
+                setInterval(() => {
+                    latestTrophy.classList.toggle('glowing');
+                }, 2000);
+            }
+            
+            // Contact form submission
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Thank you for your message! I will get back to you soon.');
+                    this.reset();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
